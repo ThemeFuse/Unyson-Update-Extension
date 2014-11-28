@@ -187,13 +187,23 @@ class FW_Extension_Github_Update extends FW_Ext_Update_Service
 				}
 			}
 
-			return new WP_Error(
-				'fw_ext_update_github_download_releases_failed',
-				sprintf(
-					__( 'Failed to access Github repository "%s" releases. (Response code: %d)', 'fw' ),
-					$user_slash_repo, $response_code
-				)
-			);
+			if ($response_code) {
+				return new WP_Error(
+					'fw_ext_update_github_download_releases_failed',
+					sprintf(
+						__( 'Failed to access Github repository "%s" releases. (Response code: %d)', 'fw' ),
+						$user_slash_repo, $response_code
+					)
+				);
+			} else {
+				return new WP_Error(
+					'fw_ext_update_github_download_releases_failed',
+					sprintf(
+						__( 'Failed to access Github repository "%s" releases.', 'fw' ),
+						$user_slash_repo
+					)
+				);
+			}
 		}
 
 		$releases = json_decode($response['body'], true);
